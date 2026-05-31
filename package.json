@@ -1,0 +1,19 @@
+{
+  "name": "voltaira-backend",
+  "version": "1.0.0",
+  "description": "Backend part of the app Voltaira",
+  "license": "MIT",
+  "author": "Julien Javelaud",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.3"
+  }
+}
