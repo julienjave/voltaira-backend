@@ -1,12 +1,11 @@
 // --- REQUIRES AND VARIABLES -----------------------------------------------------------------
 
-const { ObjectId } = require('mongodb')
 const express = require("express")
 const session = require('express-session')
 const passport = require('passport')
 
 // Import the database connecting logic
-const { connectToServer, getDb } = require('./database')
+const { connectDB } = require('./config/database')
 
 // Import the routes
 const authRoutes = require('./routes/authRoutes')
@@ -37,27 +36,16 @@ app.use((req, res, next) => {
     next()
 })
 
-// Middleware: store the database in `req`
-// `req.db` now asks the database module for the current connection.
-app.use((req, res, next) => {
-    try {
-        req.db = getDb()
-        next()
-    } catch (err) {
-        res.status(500).send(err.message)
-    }
-})
-
 // Middleware: for express to handle JSON
 app.use(express.json())
 
 // Middleware: Session (Creates the cookie settings)
 app.use(session({
-    secret: 'voltaira_secret_key', // In production, move this to your .env file!
+    secret: process.env.SESSION_SECRET, 
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false, // Set to true only if using HTTPS
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true, // Protects cookie from frontend JS tampering
         maxAge: 24 * 60 * 60 * 1000 // Cookie lasts 1 day
     }
@@ -88,7 +76,7 @@ app.use('/notes', noteRoutes)
 async function startServer() {
     try {
         // Call the connection function from the module 'database.js'
-        await connectToServer()
+        await connectDB()
 
         app.listen(PORT, () => {
             console.log("Server running on port 3000")
