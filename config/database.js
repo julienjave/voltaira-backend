@@ -21,7 +21,10 @@ const uri = process.env.MONGO_URI
 const connectDB = async () => {
     try {
         // Mongoose connects globally to the cluster
-        const conn = await mongoose.connect(uri)
+        const conn = await mongoose.connect(uri, {
+            // Explicitly tell Mongoose which database inside the cluster to target
+            dbName: process.env.MONGO_DB_NAME
+        })
         
         console.log(`Mongoose Connected: ${conn.connection.host}`)
     } catch (error) {
@@ -33,4 +36,4 @@ const connectDB = async () => {
 
 
 // --- MODULE EXPORT -------------------------------------------------------------------------------------------
-module.exports = {connectDB}
+module.exports = { connectDB }

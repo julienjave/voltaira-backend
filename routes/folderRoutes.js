@@ -6,20 +6,18 @@ const router = express.Router()
 // Import the controller functions
 const {
     // READ actions
-    getAllNotes, 
-    getAllNotesByTag, 
-    getOneNote, 
+    getAllFolders, 
+    getOneFolder, 
 
     // CREATE action
-    postOneNote, 
+    postOneFolder, 
 
     // UPDATE action
-    patchOneNote, 
+    patchOneFolder, 
 
     // DELETE actions
-    deleteOneNote, 
-    deleteAllNotes
-} = require('../controllers/noteController')
+    deleteOneFolder
+} = require('../controllers/folderController')
 
 
 // --- MIDDLEWARES -------------------------------------------------------------------------
@@ -36,19 +34,17 @@ const isAuthenticated = (req, res, next) => {
 // --- ENDPOINTS AND MATCHING FUNCTIONS ----------------------------------------------------
 
 // GET
-router.get('/', isAuthenticated, getAllNotes)
-router.get('/bytags', isAuthenticated, getAllNotesByTag) // will use query not params
-router.get('/:id', isAuthenticated, getOneNote)
+router.get('/', isAuthenticated, getAllFolders)
+router.get('/:id', isAuthenticated, getOneFolder)
 
 // POST
-router.post('/', isAuthenticated, postOneNote)
+router.post('/', isAuthenticated, postOneFolder)
 
 // PATCH
-router.patch('/:id', isAuthenticated, patchOneNote)
+router.patch('/:id', isAuthenticated, patchOneFolder)
 
 // DELETE
-router.delete('/', isAuthenticated, deleteAllNotes)
-router.delete('/:id', isAuthenticated, deleteOneNote)
+router.delete('/:id', isAuthenticated, deleteOneFolder)
 
 
 // --- MODULE EXPORT ------------------------------------------------------------------------

@@ -10,6 +10,9 @@ const { connectDB } = require('./config/database')
 // Import the routes
 const authRoutes = require('./routes/authRoutes')
 const noteRoutes = require('./routes/noteRoutes')
+const userRoutes = require('./routes/userRoutes')
+const folderRoutes = require('./routes/folderRoutes')
+const tagRoutes = require('./routes/tagRoutes')
 
 // Define the port dynamically
 const PORT = process.env.PORT || 3000
@@ -64,11 +67,19 @@ require('./config/passport')(passport)
 
 // --- ROUTES ----------------------------------------------------------------------------------
 
+// Root path catch
+app.get('/', (req, res) => {
+    res.status(200).json({ message: "Voltaira Backend Engine API is live!" });
+})
+
 // Auth
 app.use('/auth', authRoutes)
 
 // API
+app.use('/users', userRoutes)
 app.use('/notes', noteRoutes)
+app.use('/folders', folderRoutes)
+app.use('/tags', tagRoutes)
 
 
 // --- SERVER START FUNCTION -------------------------------------------------------------------
@@ -79,7 +90,7 @@ async function startServer() {
         await connectDB()
 
         app.listen(PORT, () => {
-            console.log("Server running on port 3000")
+            console.log(`Server running on port ${PORT}`)
         })
     } catch (error) {
         console.log("Failed to connect.", error)

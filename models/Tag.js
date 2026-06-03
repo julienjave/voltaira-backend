@@ -5,27 +5,26 @@ const { mongoose, Schema } = require('mongoose')
 
 // --- SCHEMA -----------------------------------------------------------------------------------
 
-const UserSchema = new Schema({
-    username: {
+const TagSchema = new Schema({
+    name: {
         type: String,
         required: true,
-        trim: true,
-        unique: true
+        trim: true, // Automatically removes accidental leading/trailing spaces
+        lowercase: true,
+        unique: true,
     },
-    email: {
+    color: {
         type: String,
-        required: true,
-        unique: true
+        default: '#333333'
     },
-    password: {
-        type: String,
+    user: {
+        type: Schema.Types.ObjectId, // A special MongoDB unique identifier
+        ref: 'User', // Links this note directly to a document in the 'User' collection
         required: true
     }
-}, {
-    timestamps: true
 })
 
 
 // --- MODULE EXPORT -------------------------------------------------------------------------------
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('Tag', TagSchema)

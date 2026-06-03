@@ -21,4 +21,4 @@ router.post('/logout', logoutUser)
 
 // --- MODULE EXPORT --------------------------------------------------------------------
 
-module.exports = {router}
+module.exports = router

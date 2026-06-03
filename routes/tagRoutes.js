@@ -6,20 +6,18 @@ const router = express.Router()
 // Import the controller functions
 const {
     // READ actions
-    getAllNotes, 
-    getAllNotesByTag, 
-    getOneNote, 
+    getAllTags, 
+    getOneTag, 
 
     // CREATE action
-    postOneNote, 
+    postOneTag, 
 
     // UPDATE action
-    patchOneNote, 
+    patchOneTag, 
 
     // DELETE actions
-    deleteOneNote, 
-    deleteAllNotes
-} = require('../controllers/noteController')
+    deleteOneTag
+} = require('../controllers/tagController')
 
 
 // --- MIDDLEWARES -------------------------------------------------------------------------
@@ -36,19 +34,17 @@ const isAuthenticated = (req, res, next) => {
 // --- ENDPOINTS AND MATCHING FUNCTIONS ----------------------------------------------------
 
 // GET
-router.get('/', isAuthenticated, getAllNotes)
-router.get('/bytags', isAuthenticated, getAllNotesByTag) // will use query not params
-router.get('/:id', isAuthenticated, getOneNote)
+router.get('/', isAuthenticated, getAllTags)
+router.get('/:id', isAuthenticated, getOneTag)
 
 // POST
-router.post('/', isAuthenticated, postOneNote)
+router.post('/', isAuthenticated, postOneTag)
 
 // PATCH
-router.patch('/:id', isAuthenticated, patchOneNote)
+router.patch('/:id', isAuthenticated, patchOneTag)
 
 // DELETE
-router.delete('/', isAuthenticated, deleteAllNotes)
-router.delete('/:id', isAuthenticated, deleteOneNote)
+router.delete('/:id', isAuthenticated, deleteOneTag)
 
 
 // --- MODULE EXPORT ------------------------------------------------------------------------
