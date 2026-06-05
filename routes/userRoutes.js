@@ -9,9 +9,6 @@ const {
     getAllUsers, 
     getOneUser, 
 
-    // CREATE action
-    postOneUser, 
-
     // UPDATE action
     patchOneUser, 
 
@@ -38,7 +35,7 @@ router.get('/', isAuthenticated, getAllUsers)
 router.get('/:id', isAuthenticated, getOneUser)
 
 // POST
-router.post('/', isAuthenticated, postOneUser)
+// For security reason this route belongs to the authentication system
 
 // PATCH
 router.patch('/:id', isAuthenticated, patchOneUser)

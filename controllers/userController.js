@@ -32,23 +32,8 @@ const getOneUser = async (req, res) => {
 // --- POST ROUTES ----------------------------------------------------------------
 
 // 1. Post one new user
-const postOneUser = async (req, res) => {
-    try {
-        const { username, email, password } = req.body
-    
-        const newUser = new User({
-            username: username,
-            email: email,
-            password: password
-        })
-        
-        const savedUser = await newUser.save()
-    
-        res.status(201).json(savedUser)
-    } catch (error) {
-        res.status(400).json({ message: "Failed to create user", error: error.message })
-    }
-}
+// The user creation is the responsability of the authentication system
+// See authController.js => registerUser()
 
 
 // --- PATCH ROUTES ---------------------------------------------------------------
@@ -56,12 +41,12 @@ const postOneUser = async (req, res) => {
 // 1. Patch one existing user by id
 const patchOneUser = async (req, res) => {
     try {
-        // { new: true }: returns the freshly updated document instead of the old version
+        // { returnDocument: 'after' }: returns the freshly updated document instead of the old version
         // { runValidators: true }: forces the update to respect the Schema rules
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id, 
             req.body, 
-            { new: true, runValidators: true }
+            { returnDocument: 'after', runValidators: true }
         );
         
         res.status(200).json(updatedNote);
@@ -102,7 +87,6 @@ const deleteOneUser = async (req, res) => {
 module.exports = {
     getAllUsers,
     getOneUser,
-    postOneUser,
     patchOneUser,
     deleteOneUser,
 }

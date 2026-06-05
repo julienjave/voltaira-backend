@@ -58,7 +58,7 @@ const patchOneTag = async (req, res) => {
         const updatedTag = await Tag.findByIdAndUpdate(
             req.params.id, 
             req.body, 
-            { new: true, runValidators: true }
+            { returnDocument: 'after', runValidators: true }
         );
         
         res.status(200).json(updatedTag);

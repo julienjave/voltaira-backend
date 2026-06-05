@@ -111,7 +111,7 @@ const patchOneNote = async (req, res) => {
         const updatedNote = await Note.findByIdAndUpdate(
             req.params.id, 
             req.body, 
-            { new: true, runValidators: true }
+            { returnDocument: 'after', runValidators: true }
         );
         
         res.status(200).json(updatedNote);
