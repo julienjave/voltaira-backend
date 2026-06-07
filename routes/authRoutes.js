@@ -8,7 +8,8 @@ const router = express.Router()
 const {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    checkStatus
 } = require('../controllers/authController')
 
 
@@ -22,6 +23,9 @@ router.post('/login', loginUser)
 
 // LOGOUT
 router.post('/logout', logoutUser)
+
+// STATUS
+router.get('/status', checkStatus)
 
 
 // --- MODULE EXPORT --------------------------------------------------------------------

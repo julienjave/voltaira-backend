@@ -86,7 +86,30 @@ const loginUser = (req, res, next) => {
 const logoutUser = (req, res) => {
     req.logout((err) => {
         if (err) return res.status(500).json({ message: "Logout failed" })
-        res.status(200).json({ message: "Successfully logged out!" })
+        return res.status(200).json({ message: "Successfully logged out!" })
+    })
+}
+
+
+// --- STATUS --------------------------------------------------------------------------
+
+const checkStatus = (req, res) => {
+    if (req.isAuthenticated()) {
+        // Session is alive! Send back a success status and user data
+        return res.status(200).json({
+            isAuthenticated: true,
+            user: {
+                id: req.user._id,
+                username: req.user.username,
+                email: req.user.email
+            }
+        })
+    }
+
+    // No session exists
+    return res.status(401).json({
+        isAuthenticated: false,
+        message: 'No active session'
     })
 }
 
@@ -96,5 +119,6 @@ const logoutUser = (req, res) => {
 module.exports = {
     registerUser,
     loginUser, 
-    logoutUser
+    logoutUser,
+    checkStatus
 }
