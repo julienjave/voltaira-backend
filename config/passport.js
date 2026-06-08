@@ -15,7 +15,7 @@ module.exports = function(passport) {
             async (username, password, done) => {
                 try {
                     // 1. Check if user exists
-                    const user = await User.findOne(username)
+                    const user = await User.findOne({ username: username })
                     if (!user) {
                         return done(null, false, { message: 'Incorrect credentials.' })
                     }

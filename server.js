@@ -3,6 +3,7 @@
 const express = require("express")
 const session = require('express-session')
 const passport = require('passport')
+const cors = require('cors')
 
 // Import the database connecting logic
 const { connectDB } = require('./config/database')
@@ -25,19 +26,10 @@ const app = express()
 
 
 // Middleware: Allow for CORS
-app.use((req, res, next) => {
-    // Allows for CORS (Cross Origin Resource Sharing)
-    res.set(`Access-Control-Allow-Origin`, `*`)
-    res.set(`Access-Control-Allow-Headers`, `Content-Type`)
-
-    // What methods are allowed
-    if (req.method === `OPTIONS`) {
-        res.set(`Access-Control-Allow-Methods`, `POST,PATCH,DELETE`)
-        return res.sendStatus(204) // Success with no content
-    }
-
-    next()
-})
+app.use(cors({
+       origin: 'http://localhost:5173', // Allow our Vite frontend dev server
+       credentials: true                // Required to allow cookie sharing
+   }))
 
 // Middleware: for express to handle JSON
 app.use(express.json())
