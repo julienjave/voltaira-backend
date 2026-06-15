@@ -7,7 +7,7 @@ const router = express.Router()
 const {
     // READ actions
     getAllNotes, 
-    getAllNotesByTag, 
+    getAllNotesByTags, 
     getOneNote, 
 
     // CREATE action
@@ -15,6 +15,8 @@ const {
 
     // UPDATE action
     patchOneNote, 
+    addTagToNote,
+    removeTagFromNote,
 
     // DELETE actions
     deleteOneNote, 
@@ -37,7 +39,7 @@ const isAuthenticated = (req, res, next) => {
 
 // GET
 router.get('/', isAuthenticated, getAllNotes)
-router.get('/bytags', isAuthenticated, getAllNotesByTag) // will use query not params
+router.get('/filter/bytags', isAuthenticated, getAllNotesByTags) // will use query not params
 router.get('/:id', isAuthenticated, getOneNote)
 
 // POST
@@ -45,6 +47,8 @@ router.post('/', isAuthenticated, postOneNote)
 
 // PATCH
 router.patch('/:id', isAuthenticated, patchOneNote)
+router.patch('/:id/tags/:tagId/add', isAuthenticated, addTagToNote)
+router.patch('/:id/tags/:tagId/remove', isAuthenticated, removeTagFromNote)
 
 // DELETE
 router.delete('/', isAuthenticated, deleteAllNotes)

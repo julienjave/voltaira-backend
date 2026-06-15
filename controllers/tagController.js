@@ -75,6 +75,12 @@ const deleteOneTag = async (req, res) => {
     try {
         await Tag.findByIdAndDelete(req.params.id)
 
+        // Automatically strip this tag ID out of EVERY note across the user's vault instantly
+        await Note.updateMany(
+            { user: req.user.id },
+            { $pull: { tags: req.params.id } }
+        )
+
         res.status(200).json({ message: "Tag deleted successfully" })
     } catch (error) {
         res.status(500).json({ message: "Failed to delete tag" })

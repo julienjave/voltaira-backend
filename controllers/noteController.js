@@ -16,44 +16,28 @@ const getAllNotes = async (req, res) => {
     }
 }
 
-// 2. Get all notes with a specific Tag / param :tag
-const getAllNotesByTag = async (req, res) => {
+// 2. Get all notes with a specific Tags 
+const getAllNotesByTags = async (req, res) => {
     try {
-        // 1. Parse the tag names from the query string
-        // If no tags are provided, default to an empty array
+        // 1. Parse the comma-separated string of hex IDs from the query parameters
         const { tags: tagsQuery } = req.query
         if (!tagsQuery) {
-            return res.status(400).json({ message: "No tags specified for search" })
+            return res.status(400).json({ message: "No tag IDs specified for search" })
         }
 
-        // Split the comma-separated string and clean up casing/spaces
-        const searchTagNames = tagsQuery.split(',').map(name => name.toLowerCase().trim())
+        // Split the string directly into an array of ID strings
+        const tagIds = tagsQuery.split(',')
 
-        // 2. Find all matching Tag documents for this specific user
-        // We use the MongoDB $in operator to find any tag whose name is in our array
-        const matchingTags = await Tag.find({
-            name: { $in: searchTagNames },
-            user: req.user.id
-        })
-
-        // If the database couldn't find ANY of the tags requested, return empty early
-        if (matchingTags.length === 0) {
-            return res.status(200).json([]);
-        }
-
-        // Extract just the ObjectIds from the tags we found
-        const tagIds = matchingTags.map(tag => tag._id)
-
-        // 3. Find the notes using the "AND" rule
-        // The MongoDB $all operator ensures a note MUST contain EVERY ID in the tagIds array
+        // 2. Query the notes directly
         const notes = await Note.find({
             user: req.user.id,
-            tags: { $all: tagIds } 
-        }).populate('tags');
+            tags: { $all: tagIds } // Mongoose automatically casts string hex IDs into ObjectIds
+        }).populate('tags')
 
         res.status(200).json(notes)
 
     } catch (error) {
+        console.error("Backend tag filter error:", error)
         res.status(500).json({ message: "Server error retrieving notes" })
     }
 }
@@ -120,6 +104,44 @@ const patchOneNote = async (req, res) => {
     }
 }
 
+// 2. Add tag atomically
+const addTagToNote = async (req, res) => {
+    try {
+        const { id, tagId } = req.params
+
+        // $addToSet guarantees no duplicate tags can ever be pushed into the array
+        const updatedNote = await Note.findOneAndUpdate(
+            { _id: id, user: req.user.id },
+            { $addToSet: { tags: tagId } },
+            { returnDocument: 'after', runValidators: true }
+        ).populate('tags')
+
+        if (!updatedNote) return res.status(404).json({ message: "Note not found" })
+        res.status(200).json(updatedNote)
+    } catch (error) {
+        res.status(500).json({ message: "Failed to add tag to note" })
+    }
+}
+
+// 3. Remove tag atomically
+const removeTagFromNote = async (req, res) => {
+    try {
+        const { id, tagId } = req.params
+
+        // $pull surgically removes the tagId from the array without touching anything else
+        const updatedNote = await Note.findOneAndUpdate(
+            { _id: id, user: req.user.id },
+            { $pull: { tags: tagId } },
+            { returnDocument: 'after', runValidators: true }
+        ).populate('tags')
+
+        if (!updatedNote) return res.status(404).json({ message: "Note not found" })
+        res.status(200).json(updatedNote)
+    } catch (error) {
+        res.status(500).json({ message: "Failed to remove tag from note" })
+    }
+}
+
 
 // --- DELETE ROUTES --------------------------------------------------------------
 
@@ -147,10 +169,12 @@ const deleteAllNotes = async (req, res) => {
 // --- MODULE EXPORT ---------------------------------------------------------------
 module.exports = {
     getAllNotes,
-    getAllNotesByTag,
+    getAllNotesByTags,
     getOneNote,
     postOneNote,
     patchOneNote,
+    addTagToNote,
+    removeTagFromNote,
     deleteOneNote,
     deleteAllNotes
 }

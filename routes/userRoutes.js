@@ -41,7 +41,7 @@ router.get('/:id', isAuthenticated, getOneUser)
 router.patch('/:id', isAuthenticated, patchOneUser)
 
 // DELETE
-router.delete('/:id', isAuthenticated, deleteOneUser)
+router.delete('/me', isAuthenticated, deleteOneUser)
 
 
 // --- MODULE EXPORT ------------------------------------------------------------------------

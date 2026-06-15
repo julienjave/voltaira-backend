@@ -61,7 +61,7 @@ const patchOneUser = async (req, res) => {
 // 1. Delete one user by id
 const deleteOneUser = async (req, res) => {
     try {
-        const userID = req.params.id
+        const userID = req.user.id
 
         // 1. Delete all notes from this user
         await Note.deleteMany({ user: userID })
@@ -73,9 +73,32 @@ const deleteOneUser = async (req, res) => {
         await Folder.deleteMany({ user: userID})
 
         // 4. Delete this user
-        await User.findByIdAndDelete(req.params.id)
+        await User.findByIdAndDelete(userID)
 
-        res.status(200).json({ message: "User deleted successfully" })
+        // 5. INTEGRATE PASSPORT LOGOUT & SESSION CLEANUP
+        // Passport's logout method unlinks the user property from the incoming request object
+        req.logout((err) => {
+            if (err) {
+                console.error("Passport logout error:", err)
+                return res.status(500).json({ message: "Failed to clear auth session" })
+            }
+
+            // Wipe the session data container out of our database/memory store (e.g., MongoStore or Redis)
+            req.session.destroy((destroyErr) => {
+                if (destroyErr) {
+                    console.error("Session destruction error:", destroyErr)
+                    return res.status(500).json({ message: "Failed to destroy session data" })
+                }
+
+                // Clear the browser's cookie container tracking this session identity
+                // Note: 'connect.sid' is the default name express-session gives our cookie.
+                res.clearCookie('connect.sid') 
+
+                // 6. Finally, send the response back to our frontend fetch client
+                return res.status(200).json({ message: "User and all associated data deleted successfully" })
+            })
+        })
+
     } catch (error) {
         res.status(500).json({ message: "Failed to delete user" })
     }

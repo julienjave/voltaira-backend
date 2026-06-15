@@ -10,8 +10,8 @@ const NoteSchema = new Schema({
         type: String,
         required: [true, 'A note title is absolutely required'],
         trim: true, // Automatically removes accidental leading/trailing spaces
-        unique: true,
-        maxlength: [100, 'Title cannot be more than 100 characters']
+        maxlength: [100, 'Title cannot be more than 100 characters'],
+        default: 'Untitled'
     },
     content: {
         type: String,
