@@ -12,7 +12,6 @@ const { connectDB } = require('./config/database')
 const authRoutes = require('./routes/authRoutes')
 const noteRoutes = require('./routes/noteRoutes')
 const userRoutes = require('./routes/userRoutes')
-const folderRoutes = require('./routes/folderRoutes')
 const tagRoutes = require('./routes/tagRoutes')
 
 // Define the port dynamically
@@ -70,7 +69,6 @@ app.use('/auth', authRoutes)
 // API
 app.use('/users', userRoutes)
 app.use('/notes', noteRoutes)
-app.use('/folders', folderRoutes)
 app.use('/tags', tagRoutes)
 
 

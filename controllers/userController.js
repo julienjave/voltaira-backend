@@ -2,7 +2,6 @@
 const User = require('../models/User')
 const Note = require('../models/Note')
 const Tag = require('../models/Tag')
-const Folder = require('../models/Folder')
 
 
 // --- GET ROUTES ----------------------------------------------------------------
@@ -69,13 +68,10 @@ const deleteOneUser = async (req, res) => {
         // 2. Delete all tags
         await Tag.deleteMany({ user: userID })
 
-        // 3. Delete all folders
-        await Folder.deleteMany({ user: userID})
-
-        // 4. Delete this user
+        // 3. Delete this user
         await User.findByIdAndDelete(userID)
 
-        // 5. INTEGRATE PASSPORT LOGOUT & SESSION CLEANUP
+        // 4. INTEGRATE PASSPORT LOGOUT & SESSION CLEANUP
         // Passport's logout method unlinks the user property from the incoming request object
         req.logout((err) => {
             if (err) {
@@ -94,7 +90,7 @@ const deleteOneUser = async (req, res) => {
                 // Note: 'connect.sid' is the default name express-session gives our cookie.
                 res.clearCookie('connect.sid') 
 
-                // 6. Finally, send the response back to our frontend fetch client
+                // 5. Finally, send the response back to our frontend fetch client
                 return res.status(200).json({ message: "User and all associated data deleted successfully" })
             })
         })
