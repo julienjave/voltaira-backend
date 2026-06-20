@@ -5,6 +5,12 @@
 [Live Demo](https://julienjave.github.io/voltaira-frontend/)
 
 
+## Repository Ecosystem
+This server operates as an independent micro-service. To review how data payloads are consumed and rendered, explore the full project ecosystem:
+- **API Data Service (This Repo):** [https://github.com/julienjave/voltaira-backend](https://github.com/julienjave/voltaira-backend)
+- **Client Interface (Frontend):** [https://github.com/julienjave/voltaira-frontend](https://github.com/julienjave/voltaira-frontend)
+
+
 ## 1. Key Features
 
 ### Authentication & Session Security
