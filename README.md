@@ -2,7 +2,7 @@
 
 **Voltaira** is a lightweight, distraction-free **Markdown text editor** designed for fluid, non-linear thinking. Built for developers, writers, and researchers, Voltaira strips away the bloat of traditional word processors, providing a fast, responsive, and connected workspace where ideas can be captured, tagged, and organized instantly.
 
-LIVE DEMO
+[Live Demo](https://julienjave.github.io/voltaira-frontend/)
 
 
 ## 1. Key Features
@@ -58,6 +58,7 @@ The backend relies on local environment configurations to isolate sensitive syst
 MONGO_URI = your_mongo_uri
 MONGO_DB_NAME = your_custom_database_name
 SESSION_SECRET = your_custom_secure_session_secret_token
+FRONTEND_ORIGIN = http://localhost:5173
 ```
 
 - `PORT`: The local network port your Express server will listen on.
