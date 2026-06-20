@@ -50,6 +50,8 @@ app.use(cors({
 // Middleware: for express to handle JSON
 app.use(express.json())
 
+app.set('trust proxy', 1);
+
 // Middleware: Session (Creates the cookie settings)
 app.use(session({
     secret: process.env.SESSION_SECRET, 
@@ -57,6 +59,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         httpOnly: true, // Protects cookie from frontend JS tampering
         maxAge: 24 * 60 * 60 * 1000 // Cookie lasts 1 day
     }
