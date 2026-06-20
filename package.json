@@ -2,7 +2,7 @@
   "name": "voltaira-backend",
   "version": "1.0.0",
   "description": "Backend part of the app Voltaira",
-  "license": "MIT",
+  "license": "Apache 2.0",
   "author": "Julien Javelaud",
   "type": "commonjs",
   "main": "server.js",
